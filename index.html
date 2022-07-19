@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jitu | To-do</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Add to do container -->
+      <div class="add-todo-container">
+        <!-- title -->
+        <div class="title">
+          <h4>Add Task Here</h4>
+        </div>
+        <!-- Form -->
+        <form action="#">
+          <!-- Todo title -->
+          <input
+            id="title"
+            class="form-input"
+            type="text"
+            placeholder="Add todo title"
+            required
+          />
+          <!-- Todo Description -->
+          <textarea
+            id="description"
+            class="form-input"
+            style="height: 5rem"
+            placeholder="Add description..."
+            required
+          ></textarea>
+          <!-- Date added -->
+          <input
+            id="date"
+            class="form-input"
+            type="date"
+            id="birthday"
+            name="birthday"
+            required
+          />
+          <!-- Submit todo -->
+          <input
+            id="submit"
+            style="height: 4rem"
+            class="form-input"
+            type="submit"
+            value="Submit Todo"
+            required
+          />
+        </form>
+      </div>
+
+      <!-- Display to-do container -->
+
+      <div class="display-todo-container">
+        <div class="todo-status">
+          <h4 id="all-todos">All</h4>
+          <h4 id="completed-todos">Completed</h4>
+          <h4 id="uncompleted-todos">Uncompleted</h4>
+        </div>
+        <!-- Todos -->
+        <div class="list-todos">
+          <!-- Todo -->
+          <!-- <div class="todo">
+            Mark complete
+            <i class="fas fa-check"></i>
+            <div class="todo-details">
+              <h4>Go shopping</h4>
+              <p>Buy some household stuffs</p>
+              <p>20 July 2022</p>
+            </div>
+            Delete todo
+            <i class="fas fa-trash-alt"></i>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
