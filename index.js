@@ -42,7 +42,9 @@ function addTodo(e) {
 function createTodo(title, description, date, completed) {
   // Create html elements
   const todo = listTodos.appendChild(document.createElement("div"));
-  const doneBtn = todo.appendChild(document.createElement("i"));
+  const iconContainer = todo.appendChild(document.createElement("div"));
+  const doneBtn = iconContainer.appendChild(document.createElement("i"));
+  const editBtn = iconContainer.appendChild(document.createElement("i"));
   const todoDetails = todo.appendChild(document.createElement("div"));
   const todoTitle = todoDetails.appendChild(document.createElement("h4"));
   const todoDescription = todoDetails.appendChild(document.createElement("p"));
@@ -51,7 +53,9 @@ function createTodo(title, description, date, completed) {
 
   // Add css classes to html elements
   todo.className = "todo";
+  iconContainer.className = "icon-container";
   doneBtn.className = "fas fa-check";
+  editBtn.className = "fas fa-pen";
   todoDetails.className = "todo-details";
   deleteBtn.className = "fas fa-trash-alt";
 
@@ -70,6 +74,37 @@ function createTodo(title, description, date, completed) {
   descriptionElement.value = "";
   dateElement.value = "";
 
+  // Edit
+  editBtn.addEventListener("click", function (e) {
+    let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+    let id = e.currentTarget.parentNode.parentNode.id;
+    // alert(e.currentTarget.parentNode.parentNode.id);
+    // return;
+
+    todos.forEach(function (task) {
+      // alert(task.todoId);
+      if (task.todoId === id) {
+        titleElement.value = task.todoTitle;
+        descriptionElement.value = task.todoDescription;
+        dateElement.value = task.todoDate;
+        // alert(task.todoTitle);
+
+        // Remove initial object
+        const indexOfObject = todos.findIndex((object) => {
+          return object.id === id;
+        });
+        // alert(indexOfObject);
+        todos.splice(indexOfObject, 1);
+
+        //   Add to local storage
+        localStorage.setItem("todos", JSON.stringify(todos));
+        return true;
+      }
+    });
+    e.currentTarget.parentNode.parentNode.remove();
+  });
+
   // Delete todo
   deleteBtn.addEventListener("click", deleteTask);
   function deleteTask(e) {
@@ -82,17 +117,19 @@ function createTodo(title, description, date, completed) {
   doneBtn.addEventListener("click", checkBtn);
   function checkBtn(e) {
     if (
-      e.target.nextSibling.firstElementChild.style.textDecoration ==
-        "line-through" ||
-      e.target.nextSibling.firstElementChild.nextSibling.style.textDecoration ==
-        "line-through" ||
-      e.target.nextSibling.lastElementChild.style.textDecoration ==
-        "line-through"
+      e.target.parentElement.nextSibling.firstElementChild.style
+        .textDecoration == "line-through" ||
+      e.target.parentElement.nextSibling.firstElementChild.nextSibling.style
+        .textDecoration == "line-through" ||
+      e.target.parentElement.nextSibling.lastElementChild.style
+        .textDecoration == "line-through"
     ) {
-      e.target.nextSibling.firstElementChild.style.textDecoration = "none";
-      e.target.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+      e.target.parentElement.nextSibling.firstElementChild.style.textDecoration =
         "none";
-      e.target.nextSibling.lastElementChild.style.textDecoration = "none";
+      e.target.parentElement.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+        "none";
+      e.target.parentElement.nextSibling.lastElementChild.style.textDecoration =
+        "none";
 
       let completed = false;
 
@@ -100,11 +137,11 @@ function createTodo(title, description, date, completed) {
 
       // storeTodo(todoId, title, description, date, false);
     } else {
-      e.target.nextSibling.firstElementChild.style.textDecoration =
+      e.target.parentElement.nextSibling.firstElementChild.style.textDecoration =
         "line-through";
-      e.target.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+      e.target.parentElement.nextSibling.firstElementChild.nextSibling.style.textDecoration =
         "line-through";
-      e.target.nextSibling.lastElementChild.style.textDecoration =
+      e.target.parentElement.nextSibling.lastElementChild.style.textDecoration =
         "line-through";
 
       let completed = true;
@@ -165,8 +202,11 @@ function loadTodos() {
     // return;
   } else {
     todos.forEach(function (task) {
+      // Create html elements
       const todo = listTodos.appendChild(document.createElement("div"));
-      const doneBtn = todo.appendChild(document.createElement("i"));
+      const iconContainer = todo.appendChild(document.createElement("div"));
+      const doneBtn = iconContainer.appendChild(document.createElement("i"));
+      const editBtn = iconContainer.appendChild(document.createElement("i"));
       const todoDetails = todo.appendChild(document.createElement("div"));
       const todoTitle = todoDetails.appendChild(document.createElement("h4"));
       const todoDescription = todoDetails.appendChild(
@@ -177,7 +217,9 @@ function loadTodos() {
 
       // Add css classes to html elements
       todo.className = "todo";
+      iconContainer.className = "icon-container";
       doneBtn.className = "fas fa-check";
+      editBtn.className = "fas fa-pen";
       todoDetails.className = "todo-details";
       deleteBtn.className = "fas fa-trash-alt";
 
@@ -199,10 +241,12 @@ function loadTodos() {
       }
 
       // Edit
-      todo.addEventListener("click", function (e) {
+      editBtn.addEventListener("click", function (e) {
         let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
-        let id = e.target.id;
+        let id = e.currentTarget.parentNode.parentNode.id;
+        // alert(e.currentTarget.parentNode.parentNode.id);
+        // return;
 
         todos.forEach(function (task) {
           // alert(task.todoId);
@@ -224,7 +268,7 @@ function loadTodos() {
             return true;
           }
         });
-        e.target.remove();
+        e.currentTarget.parentNode.parentNode.remove();
       });
 
       // Delete todo
@@ -239,27 +283,29 @@ function loadTodos() {
       doneBtn.addEventListener("click", checkBtn);
       function checkBtn(e) {
         if (
-          e.target.nextSibling.firstElementChild.style.textDecoration ==
-            "line-through" ||
-          e.target.nextSibling.firstElementChild.nextSibling.style
+          e.target.parentElement.nextSibling.firstElementChild.style
             .textDecoration == "line-through" ||
-          e.target.nextSibling.lastElementChild.style.textDecoration ==
-            "line-through"
+          e.target.parentElement.nextSibling.firstElementChild.nextSibling.style
+            .textDecoration == "line-through" ||
+          e.target.parentElement.nextSibling.lastElementChild.style
+            .textDecoration == "line-through"
         ) {
-          e.target.nextSibling.firstElementChild.style.textDecoration = "none";
-          e.target.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+          e.target.parentElement.nextSibling.firstElementChild.style.textDecoration =
             "none";
-          e.target.nextSibling.lastElementChild.style.textDecoration = "none";
+          e.target.parentElement.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+            "none";
+          e.target.parentElement.nextSibling.lastElementChild.style.textDecoration =
+            "none";
 
           task.completed = false;
 
           updateTodo(task.todoId, task.completed);
         } else {
-          e.target.nextSibling.firstElementChild.style.textDecoration =
+          e.target.parentElement.nextSibling.firstElementChild.style.textDecoration =
             "line-through";
-          e.target.nextSibling.firstElementChild.nextSibling.style.textDecoration =
+          e.target.parentElement.nextSibling.firstElementChild.nextSibling.style.textDecoration =
             "line-through";
-          e.target.nextSibling.lastElementChild.style.textDecoration =
+          e.target.parentElement.nextSibling.lastElementChild.style.textDecoration =
             "line-through";
 
           task.completed = true;
